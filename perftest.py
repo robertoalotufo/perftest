@@ -1,9 +1,13 @@
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
+
 import sys
 import pickle
 import time
 import os
 import inspect
 import numpy as np
+import pandas as pd
 from glob import glob
 #import posix_time as pt
     
@@ -111,7 +115,7 @@ class Tester():
                 #time_marker = pt.get_cpu_time()
                 try:
                     score_a = self._assert(fnc, case[0], case[1])
-                    score = min(score,score_a)   # bug para testar se não alterou imagem de entrada
+                    score = min(score,score_a)   # bug para testar se nao alterou imagem de entrada
                 except:
                     score = 0
                     min_lapsed_time = 0
@@ -369,10 +373,13 @@ class Tester():
         #table_header.shape = (1,) + table_header.shape
         #print table_header.shape, table.shape
         table = np.vstack((table_header, table))
-        print('.. csv-table:: Tabela de resultados consolidados de %d funções distribuídas em %d páginas distintas.'%(num_functions, num_pages))
-        print('   :header-rows: 1')
-        print()
-        np.savetxt(sys.stdout, table, delimiter=",", fmt='%s')
+        print('Tabela de resultados consolidados de %d funções distribuídas em %d páginas distintas.'%(num_functions, num_pages))
+        
+        tb = pd.DataFrame(table)
+        from IPython.display import display
+        display(tb)
+        
+        #np.savetxt(sys.stdout, table, delimiter=",", fmt='%s')
         if not local_only:
             np.savetxt('{}/results.csv'.format(self._base_path), table, delimiter=",", fmt='%s')
             #print
